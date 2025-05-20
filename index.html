@@ -42,6 +42,51 @@
     a.button:hover {
       background: #4fb8d9;
     }
+
+    /* New styles for special buttons container */
+    .special-buttons {
+      position: fixed;
+      bottom: 20px;       /* distance from bottom */
+      left: 50%;          /* start at 50% horizontally */
+      transform: translateX(-50%); /* center the container horizontally */
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+      margin-top: 0;      /* remove margin top since fixed */
+      background: rgba(18, 18, 18, 0.9); /* optional: add slight background for visibility */
+      padding: 0.5rem 1rem;
+      border-radius: 10px;
+      z-index: 1000;
+      box-shadow: 0 0 10px rgba(0,0,0,0.3);
+    }
+
+    .special-buttons a.button,
+    .special-buttons button {
+      min-width: 150px;
+      padding: 1rem 1.5rem;
+      font-weight: bold;
+      border-radius: 8px;
+      cursor: pointer;
+      border: none;
+      transition: background 0.2s;
+    }
+    .special-buttons a.button {
+      background: #61dafb;
+      color: #121212;
+      text-decoration: none;
+      display: inline-block;
+    }
+    .special-buttons a.button:hover {
+      background: #4fb8d9;
+    }
+    .special-buttons button {
+      background: #0070ba;
+      color: white;
+    }
+    .special-buttons button:hover {
+      background: #005a99;
+    }
   </style>
 </head>
 <body>
@@ -49,13 +94,21 @@
   <p>Simple tools made by me. No fluff. Just useful.</p>
 
   <div class="tool-buttons">
-    <!-- Copy this block for each new tool -->
     <a href="Code-Snippet-Formatter.html" class="button">🧹 Code Formatter</a>
     <a href="word-counter-reading-time.html" class="button">📝 Word Counter</a>
     <a href="Color-Palette-Picker.html" class="button">🎨 Color Palette Picker</a>
     <a href="Daily-Mood-Tracker.html" class="button">📅 Mood Journal</a>
     <a href="random-joke-generator.html" class="button">😂 Random Joke Generator</a>
+  </div>
 
+  <div class="special-buttons">
+    <a href="Suggestions.html" class="button">✉️ Suggestions</a>
+
+    <form action="https://www.paypal.com/donate" method="post" target="_top">
+      <input type="hidden" name="hosted_button_id" value="57HEFYHBSR2SY" />
+      <input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_donate_LG.gif" border="0" name="submit" title="PayPal - The safer, easier way to pay online!" alt="Donate with PayPal button" />
+      <img alt="" border="0" src="https://www.paypal.com/en_US/i/scr/pixel.gif" width="1" height="1" />
+    </form>
 
   </div>
 </body>

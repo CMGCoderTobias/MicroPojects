@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Suggestions</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      background: #121212;
+      color: #f0f0f0;
+      padding: 2rem;
+      max-width: 600px;
+      margin: auto;
+    }
+    input, textarea {
+      width: 100%;
+      margin-bottom: 1rem;
+      padding: 10px;
+      border-radius: 5px;
+      border: none;
+      font-size: 1rem;
+    }
+    button {
+      background: #61dafb;
+      border: none;
+      padding: 10px 20px;
+      font-weight: bold;
+      color: #121212;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <h1>Send Us Your Suggestions</h1>
+  <form action="https://formspree.io/f/xrbqdjwa" method="POST">
+    <input type="text" name="name" placeholder="Your Name (optional)" />
+    <input type="email" name="_replyto" placeholder="Your Email" required />
+    <textarea name="suggestion" placeholder="Your suggestion..." rows="5" required></textarea>
+    <button type="submit">Send Suggestion ✉️</button>
+  </form>
+</body>
+</html>
