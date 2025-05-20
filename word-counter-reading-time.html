@@ -34,6 +34,7 @@
     .result {
       margin-top: 1rem;
       font-size: 18px;
+      white-space: pre-line;
     }
 
     button {
@@ -72,11 +73,16 @@
       const wordCount = words.length;
 
       // Average reading speed: ~200 words per minute
-      const minutes = wordCount / 200;
-      const readTime = Math.ceil(minutes) || 1;
+      const totalSeconds = Math.round((wordCount / 200) * 60);
+      const mins = Math.floor(totalSeconds / 60);
+      const secs = totalSeconds % 60;
+
+      const readTime = mins > 0 
+        ? `${mins} minute(s)${secs > 0 ? ` and ${secs} second(s)` : ''}`
+        : `${secs} second(s)`;
 
       document.getElementById('output').innerText = 
-        `📝 Word Count: ${wordCount}\n⏱ Estimated Reading Time: ${readTime} minute(s)`;
+        `📝 Word Count: ${wordCount}\n⏱ Estimated Reading Time: ${readTime}`;
     }
   </script>
 </body>
