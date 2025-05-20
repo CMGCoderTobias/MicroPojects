@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Code Snippet Formatter</title>
+<style>
+  body {
+    font-family: monospace, monospace;
+    margin: 20px;
+    background: #282c34;
+    color: #abb2bf;
+  }
+  a.button {
+    display: inline-block;
+    margin-bottom: 20px;
+    padding: 8px 16px;
+    background: #61dafb;
+    color: #282c34;
+    text-decoration: none;
+    border-radius: 4px;
+    font-weight: bold;
+  }
+  textarea {
+    width: 100%;
+    height: 150px;
+    font-size: 16px;
+    background: #1e222a;
+    border: none;
+    color: #abb2bf;
+    padding: 10px;
+    border-radius: 4px;
+    margin-bottom: 10px;
+  }
+  pre {
+    background: #1e222a;
+    padding: 10px;
+    border-radius: 4px;
+    white-space: pre-wrap;
+    overflow-x: auto;
+  }
+  button {
+    padding: 10px 15px;
+    background: #61dafb;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    color: #282c34;
+    margin-top: 10px;
+    margin-right: 10px;
+  }
+</style>
+</head>
+<body>
+
+  <a href="index.html" class="button">⬅ Back to Home</a>
+  <h1>Code Snippet Formatter</h1>
+  <textarea id="codeInput" placeholder="Paste your messy JavaScript code here..."></textarea>
+  <button id="formatBtn">Format Code</button>
+  <button id="copyBtn" style="display:none;">Copy Formatted Code</button>
+  <pre id="formattedCode"></pre>
+
+  <!-- PrismJS for syntax highlighting -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-javascript.min.js"></script>
+
+  <!-- Prettier for JS formatting -->
+  <script src="https://unpkg.com/prettier@2.8.8/standalone.js"></script>
+  <script src="https://unpkg.com/prettier@2.8.8/parser-babel.js"></script>
+
+  <script>
+    const codeInput = document.getElementById('codeInput');
+    const formatBtn = document.getElementById('formatBtn');
+    const formattedCode = document.getElementById('formattedCode');
+    const copyBtn = document.getElementById('copyBtn');
+
+    function formatJS(code) {
+      try {
+        return prettier.format(code, {
+          parser: "babel",
+          plugins: prettierPlugins,
+          singleQuote: true,
+          semi: true,
+        });
+      } catch (e) {
+        alert('Error formatting JavaScript: ' + e.message);
+        return code;
+      }
+    }
+
+    formatBtn.onclick = () => {
+      const rawCode = codeInput.value;
+      if (!rawCode.trim()) {
+        alert('Please paste some code first!');
+        return;
+      }
+
+      const formatted = formatJS(rawCode);
+      formattedCode.className = "language-javascript";
+      formattedCode.textContent = formatted;
+      Prism.highlightElement(formattedCode);
+      copyBtn.style.display = 'inline-block';
+    };
+
+    copyBtn.onclick = () => {
+      navigator.clipboard.writeText(formattedCode.textContent)
+        .then(() => alert('Formatted code copied to clipboard!'))
+        .catch(() => alert('Failed to copy!'));
+    };
+  </script>
+
+</body>
+</html>
