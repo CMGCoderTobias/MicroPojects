@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Daily Mood Tracker with Date Picker</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      background: #121212;
+      color: #f0f0f0;
+      max-width: 600px;
+      margin: auto;
+      padding: 2rem;
+      text-align: center;
+    }
+    h1 {
+      margin-bottom: 1rem;
+    }
+    input[type="date"] {
+      font-size: 1.2rem;
+      padding: 0.3rem 0.5rem;
+      border-radius: 6px;
+      border: none;
+      margin-bottom: 1rem;
+      background: #282c34;
+      color: #f0f0f0;
+    }
+    .mood-btn {
+      font-size: 2.5rem;
+      margin: 0.5rem;
+      cursor: pointer;
+      background: #282c34;
+      border-radius: 8px;
+      width: 60px;
+      height: 60px;
+      line-height: 60px;
+      display: inline-block;
+      user-select: none;
+      transition: transform 0.2s;
+    }
+    .mood-btn:hover {
+      transform: scale(1.2);
+      background: #61dafb;
+      color: #121212;
+    }
+    #history {
+      margin-top: 2rem;
+      max-height: 300px;
+      overflow-y: auto;
+      background: #1e222a;
+      border-radius: 8px;
+      padding: 1rem;
+      text-align: left;
+    }
+    button {
+      margin-top: 1rem;
+      padding: 10px 20px;
+      background: #61dafb;
+      border: none;
+      border-radius: 8px;
+      color: #121212;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #4fb8d9;
+    }
+  </style>
+</head>
+<body>
+  <h1>Daily Mood Tracker</h1>
+  <p>Select a date, then click an emoji to set your mood.</p>
+
+  <input type="date" id="datePicker" />
+
+  <div id="moodSelector">
+    <div class="mood-btn" data-mood="happy" title="Happy">😊</div>
+    <div class="mood-btn" data-mood="neutral" title="Neutral">😐</div>
+    <div class="mood-btn" data-mood="sad" title="Sad">😢</div>
+    <div class="mood-btn" data-mood="angry" title="Angry">😠</div>
+    <div class="mood-btn" data-mood="excited" title="Excited">🤩</div>
+  </div>
+
+  <div id="history">
+    <h2>Mood History</h2>
+    <ul id="historyList"></ul>
+  </div>
+
+  <button id="clearBtn">Clear History</button>
+
+  <script>
+    const moodSelector = document.getElementById('moodSelector');
+    const historyList = document.getElementById('historyList');
+    const clearBtn = document.getElementById('clearBtn');
+    const datePicker = document.getElementById('datePicker');
+
+    const STORAGE_KEY = 'dailyMoodTracker';
+
+    // Load moods or initialize empty object
+    let moods = JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
+
+    // Set date picker to today on load
+    function setTodayDate() {
+      const today = new Date().toISOString().slice(0, 10);
+      datePicker.value = today;
+    }
+
+    function saveMood(mood) {
+      const selectedDate = datePicker.value;
+      if (!selectedDate) {
+        alert('Please select a date first!');
+        return;
+      }
+      moods[selectedDate] = mood;
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(moods));
+      renderHistory();
+      alert(`Mood for ${selectedDate} saved as "${mood}"`);
+    }
+
+    function renderHistory() {
+      historyList.innerHTML = '';
+      const dates = Object.keys(moods).sort((a, b) => b.localeCompare(a));
+      if (dates.length === 0) {
+        historyList.innerHTML = '<li>No mood data yet.</li>';
+        return;
+      }
+      for (const date of dates) {
+        const li = document.createElement('li');
+        li.textContent = `${date}: ${moods[date]}`;
+        historyList.appendChild(li);
+      }
+    }
+
+    moodSelector.addEventListener('click', (e) => {
+      if (e.target.classList.contains('mood-btn')) {
+        saveMood(e.target.getAttribute('data-mood'));
+      }
+    });
+
+    clearBtn.addEventListener('click', () => {
+      if (confirm('Are you sure you want to clear your mood history?')) {
+        moods = {};
+        localStorage.removeItem(STORAGE_KEY);
+        renderHistory();
+      }
+    });
+
+    setTodayDate();
+    renderHistory();
+  </script>
+</body>
+</html>

@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Color Palette Picker</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      background: #121212;
+      color: #f0f0f0;
+      padding: 2rem;
+      max-width: 600px;
+      margin: auto;
+      text-align: center;
+    }
+    h1 {
+      margin-bottom: 1rem;
+    }
+    input[type="color"] {
+      width: 80px;
+      height: 80px;
+      border: none;
+      cursor: pointer;
+      margin: 0.5rem;
+      border-radius: 8px;
+    }
+    .palette {
+      margin-top: 1.5rem;
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+    .color-box {
+      width: 80px;
+      height: 80px;
+      border-radius: 8px;
+      line-height: 80px;
+      font-weight: bold;
+      user-select: none;
+      cursor: pointer;
+      color: #000;
+      text-shadow: 1px 1px 2px rgba(255,255,255,0.6);
+      transition: transform 0.2s;
+    }
+    .color-box:hover {
+      transform: scale(1.1);
+    }
+    button {
+      margin-top: 1rem;
+      padding: 10px 20px;
+      background: #61dafb;
+      border: none;
+      border-radius: 8px;
+      color: #121212;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #4fb8d9;
+    }
+    #copiedMsg {
+      margin-top: 1rem;
+      color: #4caf50;
+      font-weight: bold;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <h1>Color Palette Picker</h1>
+  <p>Pick colors and click a color box to copy its hex code.</p>
+
+  <div id="colorInputs">
+    <input type="color" value="#ff0000" />
+    <input type="color" value="#00ff00" />
+    <input type="color" value="#0000ff" />
+    <input type="color" value="#ffff00" />
+    <input type="color" value="#ff00ff" />
+  </div>
+
+  <div class="palette" id="palette"></div>
+
+  <button onclick="addColor()">Add Color</button>
+  <button onclick="removeColor()">Remove Color</button>
+
+  <div id="copiedMsg">Copied to clipboard!</div>
+
+  <script>
+    const colorInputs = document.getElementById('colorInputs');
+    const palette = document.getElementById('palette');
+    const copiedMsg = document.getElementById('copiedMsg');
+
+    function updatePalette() {
+      palette.innerHTML = '';
+      const inputs = colorInputs.querySelectorAll('input[type="color"]');
+      inputs.forEach(input => {
+        const color = input.value;
+        const box = document.createElement('div');
+        box.className = 'color-box';
+        box.style.backgroundColor = color;
+        box.textContent = color.toUpperCase();
+        box.style.color = getContrastYIQ(color);
+        box.title = 'Click to copy ' + color;
+        box.onclick = () => {
+          navigator.clipboard.writeText(color).then(() => {
+            copiedMsg.style.display = 'block';
+            setTimeout(() => copiedMsg.style.display = 'none', 1500);
+          });
+        };
+        palette.appendChild(box);
+      });
+    }
+
+    // Add new color picker input
+    function addColor() {
+      if (colorInputs.children.length >= 10) return; // max 10 colors
+      const newColorInput = document.createElement('input');
+      newColorInput.type = 'color';
+      newColorInput.value = '#ffffff';
+      newColorInput.oninput = updatePalette;
+      colorInputs.appendChild(newColorInput);
+      updatePalette();
+    }
+
+    // Remove last color picker input
+    function removeColor() {
+      if (colorInputs.children.length <= 1) return; // at least 1 color
+      colorInputs.removeChild(colorInputs.lastElementChild);
+      updatePalette();
+    }
+
+    // Contrast helper (to decide if text should be black or white)
+    function getContrastYIQ(hexcolor) {
+      hexcolor = hexcolor.replace('#', '');
+      const r = parseInt(hexcolor.substr(0,2),16);
+      const g = parseInt(hexcolor.substr(2,2),16);
+      const b = parseInt(hexcolor.substr(4,2),16);
+      const yiq = ((r*299)+(g*587)+(b*114))/1000;
+      return (yiq >= 128) ? '#000' : '#fff';
+    }
+
+    // Update palette initially & add event listeners
+    colorInputs.querySelectorAll('input[type="color"]').forEach(input => {
+      input.oninput = updatePalette;
+    });
+    updatePalette();
+  </script>
+</body>
+</html>
