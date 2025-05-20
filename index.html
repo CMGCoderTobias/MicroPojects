@@ -17,9 +17,20 @@
       font-size: 2rem;
       margin-bottom: 1rem;
     }
+    p {
+      margin-bottom: 2rem;
+      color: #ccc;
+    }
+    .tool-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 1rem;
+    }
     a.button {
       display: inline-block;
-      margin: 1rem;
+      min-width: 200px;
+      text-align: center;
       padding: 1rem 2rem;
       background: #61dafb;
       color: #121212;
@@ -36,6 +47,12 @@
 <body>
   <h1>Welcome to My Dev Tools</h1>
   <p>Simple tools made by me. No fluff. Just useful.</p>
-  <a href="Code-Snippet-Formatter.html" class="button">🧹 Code Formatter</a>
+
+  <div class="tool-buttons">
+    <!-- Copy this block for each new tool -->
+    <a href="Code-Snippet-Formatter.html" class="button">🧹 Code Formatter</a>
+    <a href="word-count-reading-time.html" class="button">📝 Word Counter</a>
+
+  </div>
 </body>
 </html>
